@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consecutive Marks Checker</title>
+    <script>
+        function checkConsecutiveMarks() {
+            // Get the input values
+            const size = parseInt(document.getElementById('size').value);
+            const marksInput = document.getElementById('marks').value;
+            
+            // Convert the input marks to an array of integers
+            const marks = marksInput.split(',').map(Number);
+            
+            if (marks.length !== size) {
+                alert("The number of marks does not match the specified size.");
+                return;
+            }
+            
+            // Sort the array
+            marks.sort((a, b) => a - b);
+            
+            // Check for consecutiveness
+            let isConsecutive = true;
+            for (let i = 1; i < marks.length; i++) {
+                if (marks[i] !== marks[i - 1] + 1) {
+                    isConsecutive = false;
+                    break;
+                }
+            }
+            
+            // Display the result
+            document.getElementById('result').innerText = isConsecutive ? "1" : "0";
+        }
+    </script>
+</head>
+<body>
+    <h1>Consecutive Marks Checker</h1>
+    <form onsubmit="event.preventDefault(); checkConsecutiveMarks();">
+        <label for="size">Enter the size of the array:</label>
+        <input type="number" id="size" required>
+        <br><br>
+        <label for="marks">Enter the marks (comma-separated):</label>
+        <input type="text" id="marks" required>
+        <br><br>
+        <button type="submit">Check Marks</button>
+    </form>
+    <h2>Result:</h2>
+    <p id="result"></p>
+</body>
+</html>

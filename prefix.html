@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postfix Expression Evaluator</title>
+</head>
+<body>
+    <h1>Postfix Expression Evaluator</h1>
+    <label for="expression">Enter postfix expression: </label>
+    <input type="text" id="expression" name="expression" placeholder="e.g., 3 4 5 * +">
+    <button onclick="evaluateExpression()">Evaluate</button>
+    <p id="result"></p>
+
+    <script>
+        function evaluatePostfix(expression) {
+            const stack = [];
+            const tokens = expression.split(/\s+/); // Split by whitespace
+
+            tokens.forEach(token => {
+                if (!isNaN(token)) {
+                    // If token is a number, push it onto the stack
+                    stack.push(parseFloat(token));
+                } else {
+                    // Token is an operator
+                    const b = stack.pop(); // Second operand
+                    const a = stack.pop(); // First operand
+
+                    switch (token) {
+                        case '+':
+                            stack.push(a + b);
+                            break;
+                        case '-':
+                            stack.push(a - b);
+                            break;
+                        case '*':
+                            stack.push(a * b);
+                            break;
+                        case '/':
+                            if (b === 0) {
+                                throw new Error('Division by zero');
+                            }
+                            stack.push(a / b);
+                            break;
+                        default:
+                            throw new Error(`Unknown operator: ${token}`);
+                    }
+                }
+            });
+
+            // The result should be the only value left in the stack
+            if (stack.length !== 1) {
+                throw new Error('Invalid postfix expression');
+            }
+
+            return stack.pop();
+        }
+
+        function evaluateExpression() {
+            const input = document.getElementById('expression').value;
+            try {
+                const result = evaluatePostfix(input);
+                document.getElementById('result').innerText = `Result: ${result}`;
+            } catch (error) {
+                document.getElementById('result').innerText = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
